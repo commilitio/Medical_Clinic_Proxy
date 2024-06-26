@@ -1,0 +1,61 @@
+version: '3'
+services:
+  medical-clinic:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING.DATASOURCE.URL: jdbc:postgresql://postgres:5432/medical-clinic
+      SPRING.DATASOURCE.USERNAME: user1
+      SPRING.DATASOURCE.PASSWORD: password1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - clinic-network
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: medical-clinic
+      POSTGRES_USER: user1
+      POSTGRES_PASSWORD: password1
+    ports:
+      - "5432:5432"
+    networks:
+      - clinic-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: userName@domain.com
+      PGADMIN_DEFAULT_PASSWORD: strongPassword
+    depends_on:
+      - postgres
+    networks:
+      - clinic-network
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+  medical-clinic-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      - medical-clinic
+    environment:
+      spring.cloud.openfeign.client.config.MedicalClient.url: http://medical-clinic:8080
+    networks:
+      - clinic-network
+
+volumes:
+  pgadmin:
+
+networks:
+  clinic-network:
+    driver: bridge
