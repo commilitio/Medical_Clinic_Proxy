@@ -49,7 +49,7 @@ services:
     depends_on:
       - medical-clinic
     environment:
-      spring.cloud.openfeign.client.config.MedicalClient.url: http://medical-clinic:8080
+      spring.cloud.openfeign.client.config.MedicalClinicClient.url: http://medical-clinic:8080
     networks:
       - clinic-network
 
