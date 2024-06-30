@@ -1,9 +1,7 @@
 version: '3'
 services:
   medical-clinic:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: medical-clinic-123
     environment:
       SPRING.DATASOURCE.URL: jdbc:postgresql://postgres:5432/medical-clinic
       SPRING.DATASOURCE.USERNAME: user1
