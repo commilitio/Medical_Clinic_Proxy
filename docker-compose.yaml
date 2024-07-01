@@ -23,6 +23,8 @@ services:
       - "5432:5432"
     networks:
       - clinic-network
+    volumes:
+      - postgres:/var/lib/postgres
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -53,6 +55,7 @@ services:
 
 volumes:
   pgadmin:
+  postgres:
 
 networks:
   clinic-network:
