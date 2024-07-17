@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 
-public class DoctorVisitTest {
+public class DoctorServiceTest {
 
     private DoctorService doctorService;
     private MedicalClinicClient medicalClinicClient;
