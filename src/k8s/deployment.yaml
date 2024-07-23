@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medical-clinic-proxy-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: medical-clinic-proxy
+  template:
+    metadata:
+      labels:
+        app: medical-clinic-proxy
+    spec:
+      containers:
+        - name: medical-clinic-proxy
+          image: medical-clinic-proxy:latest
+          ports:
+            - containerPort: 8083
+          env:
+            - name: SPRING_CLOUD_OPENFEIGN_CLIENT_CONFIG_MEDICALCLINICCLIENT_URL
+              value: http://medical-clinic:8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8083
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8083
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          startupProbe:
+            httpGet:
+              path: /actuator/health/startup
+              port: 8083
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+            successThreshold: 1
